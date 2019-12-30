@@ -9,3 +9,28 @@
     height: 100%;
     flex: 1;
 }
+
+.editor-property {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    &-header {
+        flex: 0 0 48px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 12px;
+    }
+    &-content {
+        flex: 1;
+        overflow-y: auto;
+    }
+}
+
+.action-icon {
+    transition: color .125s;
+    cursor: pointer;
+    // &:hover {
+    //     color: @primary-color;
+    // }
+}

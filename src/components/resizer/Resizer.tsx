@@ -32,7 +32,6 @@ class Resizer extends Component<IProps, IState> {
     createObserver = () => {
         this.resizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
             const { width = 0, height = 0 } = entries[0] && entries[0].contentRect || {};
-            console.log(width, height);
             this.setState({
                 width,
                 height,

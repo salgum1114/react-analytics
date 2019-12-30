@@ -7,7 +7,9 @@
         "enabled": "사용 여부",
         "add": "추가",
         "more": "더 보기",
-        "ok": "확인"
+        "ok": "확인",
+        "collapse": "축소",
+        "expand": "확장"
     },
     "common": {
         "id": "아이디",
@@ -26,14 +28,22 @@
         "warning": "경고",
         "critical": "심각",
         "location": "위치",
-        "basic-info": "기본 정보"
+        "basic-info": "기본 정보",
+        "category": "카테고리",
+        "time": "시간",
+        "log": "로그",
+        "visible": "보기",
+        "inverse": "역"
     },
     "confirm": {
         "delete": "'{{arg}}'을(를) 삭제하시겠습니까?"
     },
     "chart": {
         "line": "라인 차트",
-        "bar": "바 차트"
+        "bar": "바 차트",
+        "area": "영역 차트",
+        "scatter": "스캐터 차트",
+        "pie": "파이 차트"
     },
     "widget": {
         "modify": "위젯 수정",
@@ -68,11 +78,13 @@
         },
         "xaxis": {
             "title": "X 축",
-            "description": "X 축을 설정합니다"
+            "description": "X 축을 설정합니다",
+            "data": "X 축 데이터"
         },
         "yaxis": {
             "title": "Y 축",
-            "description": "Y 축을 설정합니다"
+            "description": "Y 축을 설정합니다",
+            "data": "Y 축 데이터"
         },
         "grid": {
             "title": "그리드",
