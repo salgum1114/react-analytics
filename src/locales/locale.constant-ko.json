@@ -33,7 +33,10 @@
         "time": "시간",
         "log": "로그",
         "visible": "보기",
-        "inverse": "역"
+        "inverse": "역",
+        "scale": "규모",
+        "min": "최소",
+        "max": "최대"
     },
     "confirm": {
         "delete": "'{{arg}}'을(를) 삭제하시겠습니까?"
@@ -49,6 +52,14 @@
         "modify": "위젯 수정",
         "delete": "위젯 삭제",
         "clone": "위젯 복제",
+        "silent": "이벤트 취소",
+        "scale": "차트 확대",
+        "z-level": "우선 순위",
+        "boundary-gap": "차트 공백",
+        "interval": "간격",
+        "min-interval": "최소 간격",
+        "max-interval": "최대 간격",
+        "split-number": "분할 개수",
         "card": {
             "title": "카드 위젯",
             "description": "카드 형태의 위젯을 추가합니다",

@@ -119,8 +119,72 @@ class YAxisPanel extends Component<{}, IState> {
                                     initialValue: false,
                                     span: 12,
                                 },
+                                scale: {
+                                    label: i18next.t('widget.scale'),
+                                    type: 'boolean',
+                                    initialValue: false,
+                                    span: 12,
+                                },
+                                silent: {
+                                    label: i18next.t('widget.silent'),
+                                    type: 'boolean',
+                                    initialValue: false,
+                                    span: 12,
+                                },
                                 name: {
                                     label: i18next.t('common.name'),
+                                },
+                                interval: {
+                                    label: i18next.t('widget.interval'),
+                                    type: 'number',
+                                    span: 8,
+                                    min: 0,
+                                },
+                                minInterval: {
+                                    label: i18next.t('widget.min-interval'),
+                                    type: 'number',
+                                    span: 8,
+                                    initialValue: 0,
+                                    min: 0,
+                                },
+                                maxInterval: {
+                                    label: i18next.t('widget.max-interval'),
+                                    type: 'number',
+                                    span: 8,
+                                    min: 0,
+                                },
+                                splitNumber: {
+                                    label: i18next.t('widget.split-number'),
+                                    type: 'number',
+                                    initialValue: 5,
+                                    span: 8,
+                                    min: 0,
+                                },
+                                min: {
+                                    label: i18next.t('common.min'),
+                                    type: 'number',
+                                    initialValue: null,
+                                    span: 8,
+                                },
+                                max: {
+                                    label: i18next.t('common.max'),
+                                    type: 'number',
+                                    initialValue: null,
+                                    span: 8,
+                                },
+                                boundaryGap: {
+                                    label: i18next.t('widget.boundary-gap'),
+                                    type: 'boolean',
+                                    initialValue: true,
+                                    span: 12,
+                                },
+                                zLevel: {
+                                    label: i18next.t('widget.z-level'),
+                                    type: 'number',
+                                    initialValue: 0,
+                                    min: 0,
+                                    max: 1000,
+                                    span: 12,
                                 },
                             }}
                             onChange={this.handleChangeYAxis}

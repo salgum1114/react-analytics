@@ -175,7 +175,7 @@ class Form extends Component<FormProps, IState> {
             ref,
         } = formConfig;
         let value = !isEmpty(values) ? values[key] : initialValue;
-        if (typeof value === 'undefined' && type === 'boolean') {
+        if (typeof value === 'undefined') {
             value = initialValue;
         }
         if (isSingle) {

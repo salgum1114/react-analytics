@@ -129,9 +129,9 @@ class SeriesPanel extends Component<{}, IState> {
                                     style: { width: '100%' },
                                     span: 12,
                                     items: Object.keys(xAxis).map((key, index) => {
-                                        const { name = `x${index}` } = xAxis[key];
+                                        const { name } = xAxis[key];
                                         return {
-                                            label: name,
+                                            label: name && name.length ? name : `x${index}`,
                                             value: key,
                                         };
                                     }),
@@ -142,9 +142,9 @@ class SeriesPanel extends Component<{}, IState> {
                                     style: { width: '100%' },
                                     span: 12,
                                     items: Object.keys(yAxis).map((key, index) => {
-                                        const { name = `y${index}` } = yAxis[key];
+                                        const { name } = yAxis[key];
                                         return {
-                                            label: name,
+                                            label: name && name.length ? name : `y${index}`,
                                             value: key,
                                         };
                                     }),
