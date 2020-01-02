@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import uuid from 'uuid';
 import { Collapse, Button, Icon, Empty } from 'antd';
 import i18next from 'i18next';
+import debounce from 'lodash/debounce';
 
 import { Form } from '.';
 import { FormProps } from './Form';
@@ -11,7 +12,10 @@ export interface DynamicFormProps extends Omit<FormProps, 'onChange' | 'form'> {
     label?: React.ReactNode;
     onChange?: (datas: { [key: string]: DynamicData }) => void;
     onChangeActiveKey?: (activeKey: string[]) => void;
+    delay?: number;
     addButton?: boolean;
+    deleteButton?: boolean;
+    cloneButton?: boolean;
     allDelete?: boolean;
     activeKey?: string[];
 }
@@ -122,6 +126,9 @@ class DynamicForm extends Component<DynamicFormProps> {
             onChangeActiveKey,
             activeKey: activeKeys,
             allDelete,
+            cloneButton = true,
+            deleteButton = true,
+            delay = 300,
             ...other
         } = this.props;
         const { datas, activeKey } = this.state;
@@ -136,7 +143,7 @@ class DynamicForm extends Component<DynamicFormProps> {
                                     key={key}
                                     header={`${label}_${index}`}
                                     extra={[
-                                        <Icon
+                                        cloneButton && <Icon
                                             key="copy"
                                             className="action-icon"
                                             type="copy"
@@ -145,7 +152,7 @@ class DynamicForm extends Component<DynamicFormProps> {
                                                 this.handleCloneForm(datas[key]);
                                             }}
                                         />,
-                                        datasLength > 1 ? <Icon
+                                        deleteButton && datasLength > 1 ? <Icon
                                             key="delete"
                                             className="action-icon"
                                             type="delete"
@@ -170,7 +177,7 @@ class DynamicForm extends Component<DynamicFormProps> {
                                         useForm={false}
                                         formSchema={formSchema}
                                         formKey={key}
-                                        onValuesChange={this.handleValuesChange}
+                                        onValuesChange={debounce(this.handleValuesChange, delay < 0 ? 0 : delay)}
                                         values={datas[key]}
                                     />
                                 </Collapse.Panel>

@@ -17,6 +17,7 @@ import i18next from 'i18next';
 import isEmpty from 'lodash/isEmpty';
 
 import DynamicForm from './DynamicForm';
+import { ColorPicker } from '../picker';
 
 export type FormComponentType = 'divider'
 | 'label'
@@ -33,6 +34,7 @@ export type FormComponentType = 'divider'
 | 'dynamic'
 | 'custom'
 | 'password'
+| 'color'
 ;
 
 export type FormSchema = MultipleFormConfig | FormConfig;
@@ -257,6 +259,9 @@ class Form extends Component<FormProps, IState> {
                 break;
             case 'dynamic':
                 component = <DynamicForm formSchema={forms} label={header} />;
+                break;
+            case 'color':
+                component = <ColorPicker />;
                 break;
             case 'custom':
                 component = render ? render(form, values, disabled, this.validators.validate) : (formConfig.component ? (

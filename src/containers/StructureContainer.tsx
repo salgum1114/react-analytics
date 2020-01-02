@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import uuid from 'uuid';
+import StyleContainer from './StyleContainer';
 
 export interface IStructureContext {
     series: any;
@@ -14,6 +15,10 @@ export interface IStructureContext {
     yAxisActiveKey: string[];
     onChangeYAxis: (yAxis: any) => void;
     onChangeYAxisActiveKey: (activeKey: string[]) => void;
+    grid: any;
+    gridActiveKey: string[];
+    onChangeGrid: (grid: any) => void;
+    onChangeGridActiveKey: (activeKey: string[]) => void;
 }
 
 export const StructureContext = React.createContext<IStructureContext>(null);
@@ -26,36 +31,50 @@ const StructureContainer: React.SFC = props => {
             data: Array.from({ length: 12 }, () => Math.random() * 1000 + 100),
         },
     });
-    const [seriesActiveKey, setSeriesActiveKey] = useState([]);
     const [xAxis, setXAxis] = useState({
         [uuid()]: {
             type: 'category',
+            show: true,
         },
     });
-    const [xAxisActiveKey, setXAxisActiveKey] = useState([]);
     const [yAxis, setYAxis] = useState({
         [uuid()]: {
             type: 'value',
+            show: true,
         },
     });
+    const [grid, setGrid] = useState({
+        [uuid()]: {
+            show: false,
+        },
+    });
+    const [xAxisActiveKey, setXAxisActiveKey] = useState([]);
+    const [seriesActiveKey, setSeriesActiveKey] = useState([]);
     const [yAxisActiveKey, setYAxisActiveKey] = useState([]);
+    const [gridActiveKey, setGridActiveKey] = useState([]);
     const handleChangeSeries = (series: any) => {
         setSeries(series);
-    }
-    const handleChangeSeriesActiveKey = (activeKey: string[]) => {
-        setSeriesActiveKey(activeKey);
     }
     const handleChangeXAxis = (xAxis: any) => {
         setXAxis(xAxis);
     }
-    const handleChangeXAxisActiveKey = (activeKey: string[]) => {
-        setXAxisActiveKey(activeKey);
-    }
     const handleChangeYAxis = (yAxis: any) => {
         setYAxis(yAxis);
     }
+    const handleChangeGrid = (grid: any) => {
+        setGrid(grid);
+    }
+    const handleChangeSeriesActiveKey = (activeKey: string[]) => {
+        setSeriesActiveKey(activeKey);
+    }
+    const handleChangeXAxisActiveKey = (activeKey: string[]) => {
+        setXAxisActiveKey(activeKey);
+    }
     const handleChangeYAxisActiveKey = (activeKey: string[]) => {
         setYAxisActiveKey(activeKey);
+    }
+    const handleChangeGridActiveKey = (activeKey: string[]) => {
+        setGridActiveKey(activeKey);
     }
     return (
         <StructureContext.Provider
@@ -72,9 +91,15 @@ const StructureContainer: React.SFC = props => {
                 yAxisActiveKey,
                 onChangeYAxis: handleChangeYAxis,
                 onChangeYAxisActiveKey: handleChangeYAxisActiveKey,
+                grid,
+                gridActiveKey,
+                onChangeGrid: handleChangeGrid,
+                onChangeGridActiveKey: handleChangeGridActiveKey,
             }}
         >
-            {children}
+            <StyleContainer>
+                {children}
+            </StyleContainer>
         </StructureContext.Provider>
     );
 }

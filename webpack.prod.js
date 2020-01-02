@@ -15,7 +15,7 @@ const plugins = [
     }),
     // index.html 로 의존성 파일들 inject해주는 플러그인
     new WorkboxPlugin.GenerateSW({
-        swDest: 'docs/sw.js',
+        swDest: 'sw.js',
         skipWaiting: true,
         clientsClaim: true,
     }),

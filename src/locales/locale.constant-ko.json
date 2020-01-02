@@ -9,7 +9,8 @@
         "more": "더 보기",
         "ok": "확인",
         "collapse": "축소",
-        "expand": "확장"
+        "expand": "확장",
+        "clear": "초기화"
     },
     "common": {
         "id": "아이디",
@@ -36,7 +37,12 @@
         "inverse": "역",
         "scale": "규모",
         "min": "최소",
-        "max": "최대"
+        "max": "최대",
+        "structure": "구조",
+        "style": "스타일",
+        "item": "아이템",
+        "axis": "축",
+        "none": "없음"
     },
     "confirm": {
         "delete": "'{{arg}}'을(를) 삭제하시겠습니까?"
@@ -60,6 +66,8 @@
         "min-interval": "최소 간격",
         "max-interval": "최대 간격",
         "split-number": "분할 개수",
+        "log-base": "로그 베이스",
+        "contain-label": "라벨 표시 여부",
         "card": {
             "title": "카드 위젯",
             "description": "카드 형태의 위젯을 추가합니다",
@@ -100,9 +108,33 @@
         "grid": {
             "title": "그리드",
             "description": "차트의 그리드를 설정합니다"
+        },
+        "animation": {
+            "title": "애니메이션"
+        },
+        "tooltip": {
+            "title": "툴팁"
+        },
+        "trigger": {
+            "title": "트리거"
         }
     },
     "validate": {
         "enter-arg": "'{{arg}}'을(를) 입력해 주세요"
+    },
+    "layout": {
+        "left": "왼쪽",
+        "right": "오른쪽",
+        "top": "위",
+        "bottom": "아래",
+        "width": "넓이",
+        "height": "높이",
+        "background-color": "배경색",
+        "border-color": "테두리 색",
+        "border-width": "테두리 넓이",
+        "shadow-color": "그림자 색",
+        "shadow-blur": "그림자 번짐",
+        "shadow-offset-x": "그림자 X 위치",
+        "shadow-offset-y": "그림자 Y 위치"
     }
 }

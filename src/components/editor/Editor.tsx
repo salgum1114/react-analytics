@@ -1,11 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component, ErrorInfo } from 'react';
 import { Layout } from 'antd';
+
+import { i18nClient } from '../../i18n';
 
 import { Sider, Content } from '../layout';
 
 import '../../styles/index.less';
 import StructureContainer from '../../containers/StructureContainer';
 import { SelectParam } from 'antd/lib/menu';
+import { ErrorBoundary } from '../error';
+
+i18nClient();
 
 interface IState {
     panelKey: string;
@@ -13,7 +18,7 @@ interface IState {
 
 class Editor extends Component<{}, IState> {
     state: IState = {
-        panelKey: 'series',
+        panelKey: 'structure:series',
     }
 
     handleSelectMenu = (param: SelectParam) => {
@@ -26,14 +31,16 @@ class Editor extends Component<{}, IState> {
     render() {
         const { panelKey } = this.state;
         return (
-            <StructureContainer>
-                <Layout className="editor-container">
-                    <Sider onSelect={this.handleSelectMenu} />
-                    <Layout>
-                        <Content panelKey={panelKey} />
+            <ErrorBoundary>
+                <StructureContainer>
+                    <Layout className="editor-container">
+                        <Sider onSelect={this.handleSelectMenu} />
+                        <Layout>
+                            <Content panelKey={panelKey} />
+                        </Layout>
                     </Layout>
-                </Layout>
-            </StructureContainer>
+                </StructureContainer>
+            </ErrorBoundary>
         );
     }
 }

@@ -2,7 +2,13 @@ import React, { Component } from 'react';
 import { Layout } from 'antd';
 import Split from 'react-split';
 
-import { DataGridPanel, ChartPanel, PropertyPanel } from '../panel';
+import { DataGridPanel, ChartPanel, StructurePanel, StylePanel, Panel } from '../panel';
+import ChartContainer from '../../containers/ChartContainer';
+
+const panels: Record<string, any> = {
+    structure: StructurePanel,
+    style: StylePanel,
+}
 
 interface IProps {
     panelKey: string;
@@ -11,6 +17,8 @@ interface IProps {
 class Content extends Component<IProps> {
     render() {
         const { panelKey } = this.props;
+        const [mainKey, subKey] = panelKey.split(':');
+        const PanelComponent = panels[mainKey];
         return (
             <Layout.Content style={{ position: 'relative', width: '100%', height: '100%' }}>
                 <Split
@@ -19,7 +27,9 @@ class Content extends Component<IProps> {
                     sizes={[25, 75]}
                     minSize={[260, 700]}
                 >
-                    <PropertyPanel panelKey={panelKey} />
+                    <Panel>
+                        <PanelComponent key={panelKey} panelKey={subKey} />
+                    </Panel>
                     <Split
                         style={{ overflow: 'hidden' }}
                         direction="vertical"
@@ -27,8 +37,14 @@ class Content extends Component<IProps> {
                         sizes={[25, 75]}
                         minSize={[260, 500]}
                     >
-                        <DataGridPanel />
-                        <ChartPanel />
+                        <Panel>
+                            <DataGridPanel />
+                        </Panel>
+                        <Panel>
+                            <ChartContainer>
+                                <ChartPanel />
+                            </ChartContainer>
+                        </Panel>
                     </Split>
                 </Split>
             </Layout.Content>
