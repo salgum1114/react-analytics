@@ -1,11 +1,32 @@
 import React, { Component } from 'react';
 import i18next from 'i18next';
 import { Button } from 'antd';
+import debounce from 'lodash/debounce';
 
 import { Form } from '../../form';
+import { StructureContext, IStructureContext } from '../../../containers/StructureContainer';
 
-class TooltipPanel extends Component {
+interface IState {
+    tooltip: Record<string, any>;
+}
+
+class TooltipPanel extends Component<{}, IState> {
+    static contextType = StructureContext;
+    context: IStructureContext;
+
+    constructor(props: {}, context: IStructureContext) {
+        super(props, context);
+        this.state = {
+            tooltip: context.tooltip,
+        }
+    }
+
+    handleValuesChange = (allValues: any) => {
+        this.context.onChangeTooltip(allValues);
+    }
+
     render() {
+        const { tooltip } = this.context;
         return (
             <div className="editor-property">
                 <div className="editor-property-header">
@@ -13,6 +34,8 @@ class TooltipPanel extends Component {
                 </div>
                 <div className="editor-property-content">
                     <Form
+                        onValuesChange={debounce(this.handleValuesChange, 300)}
+                        values={tooltip}
                         formSchema={{
                             show: {
                                 label: i18next.t('common.visible'),
@@ -37,6 +60,36 @@ class TooltipPanel extends Component {
                                         value: 'none',
                                     },
                                 ],
+                            },
+                            axisPointer: {
+                                label: i18next.t('widget.axis-pointer.title'),
+                                type: 'form',
+                                forms: {
+                                    show: {
+                                        label: i18next.t('common.visible'),
+                                        type: 'boolean',
+                                    },
+                                    label: {
+                                        label: i18next.t('common.label'),
+                                        type: 'form',
+                                        forms: {
+                                            show: {
+                                                label: i18next.t('common.visible'),
+                                                type: 'boolean',
+                                            },
+                                        },
+                                    },
+                                    type: {
+                                        label: i18next.t('common.type'),
+                                        type: 'select',
+                                        items: [
+                                            {
+                                                label: i18next.t('widget.line.title'),
+                                                value: 'line',
+                                            },
+                                        ],
+                                    },
+                                },
                             },
                         }}
                     />

@@ -35,6 +35,7 @@ export type FormComponentType = 'divider'
 | 'custom'
 | 'password'
 | 'color'
+| 'form'
 ;
 
 export type FormSchema = MultipleFormConfig | FormConfig;
@@ -176,7 +177,12 @@ class Form extends Component<FormProps, IState> {
             onPressEnter,
             ref,
         } = formConfig;
-        let value = !isEmpty(values) ? values[key] : initialValue;
+        let value = !isEmpty(values) ? key.split('.').reduce((prev, curr) => {
+            if (typeof prev !== 'object') {
+                return prev;
+            }
+            return prev[curr];
+        }, values) : initialValue;
         if (typeof value === 'undefined') {
             value = initialValue;
         }
@@ -276,6 +282,16 @@ class Form extends Component<FormProps, IState> {
                     />
                 ) : null);
                 break;
+            case 'form':
+                component = (
+                    <div style={style}>
+                        <span style={{ fontWeight: 'bold', marginBottom: 4 }}>
+                            {label}
+                        </span>
+                        {Object.keys(forms).map(formKey => this.createFormItem(`${key}.${formKey}`, (forms as MultipleFormConfig)[formKey]))}
+                    </div>
+                )
+                break;
             default:
                 component = <Input ref={ref} onPressEnter={onPressEnter} style={style} minLength={min} maxLength={max} placeholder={placeholder} disabled={disabled} />;
         }
@@ -298,21 +314,25 @@ class Form extends Component<FormProps, IState> {
         return (
             <React.Fragment key={key}>
                 <Col md={24} lg={span || 24}>
-                    <AntForm.Item
-                        colon={colon}
-                        label={label ? newLabel : null}
-                        help={help}
-                        extra={extra}
-                        hasFeedback={hasFeedback}
-                    >
-                        {
-                            form.getFieldDecorator(key, {
-                                initialValue: value,
-                                rules: newRules,
-                                valuePropName: typeof value === 'boolean' ? 'checked' : valuePropName || 'value',
-                            })(component)
-                        }
-                    </AntForm.Item>
+                    {
+                        type === 'form' ? component : (
+                            <AntForm.Item
+                                colon={colon}
+                                label={label ? newLabel : null}
+                                help={help}
+                                extra={extra}
+                                hasFeedback={hasFeedback}
+                            >
+                                {
+                                    form.getFieldDecorator(key, {
+                                        initialValue: value,
+                                        rules: newRules,
+                                        valuePropName: typeof value === 'boolean' ? 'checked' : valuePropName || 'value',
+                                    })(component)
+                                }
+                            </AntForm.Item>
+                        )
+                    }
                 </Col>
                 {selectFormItems}
             </React.Fragment>

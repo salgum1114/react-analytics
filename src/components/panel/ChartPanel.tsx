@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo } from 'react';
+import React, { Component } from 'react';
 import ReactEcharts from 'echarts-for-react';
 
 import { IChartContext, ChartContext } from '../../containers/ChartContainer';
@@ -13,9 +13,14 @@ class ChartPanel extends Component {
         this.echarts = this.chartRef.getEchartsInstance();
     }
 
-    getOption = () => {
+    componentDidCatch(error: Error) {
+        console.error(error);
+    }
+
+    getOption = (): echarts.EChartOption => {
         const { structure, style } = this.context;
-        const { series, xAxis, yAxis, grid } = structure;
+        const { series, xAxis, yAxis, grid, tooltip } = structure;
+        const tooltipOption = tooltip;
         const gridOption = Object.keys(grid).map(key => {
             return {
                 id: key,
@@ -68,6 +73,7 @@ class ChartPanel extends Component {
             };
         });
         return {
+            tooltip: tooltipOption,
             xAxis: xAxisOption,
             yAxis: yAxisOption,
             grid: gridOption,

@@ -19,6 +19,8 @@ export interface IStructureContext {
     gridActiveKey: string[];
     onChangeGrid: (grid: any) => void;
     onChangeGridActiveKey: (activeKey: string[]) => void;
+    tooltip: any;
+    onChangeTooltip: (tooltip: any) => void;
 }
 
 export const StructureContext = React.createContext<IStructureContext>(null);
@@ -48,6 +50,7 @@ const StructureContainer: React.SFC = props => {
             show: false,
         },
     });
+    const [tooltip, setTooltip] = useState({})
     const [xAxisActiveKey, setXAxisActiveKey] = useState([]);
     const [seriesActiveKey, setSeriesActiveKey] = useState([]);
     const [yAxisActiveKey, setYAxisActiveKey] = useState([]);
@@ -63,6 +66,9 @@ const StructureContainer: React.SFC = props => {
     }
     const handleChangeGrid = (grid: any) => {
         setGrid(grid);
+    }
+    const handleChangeTooltip = (tooltip: any) => {
+        setTooltip(tooltip);
     }
     const handleChangeSeriesActiveKey = (activeKey: string[]) => {
         setSeriesActiveKey(activeKey);
@@ -95,6 +101,8 @@ const StructureContainer: React.SFC = props => {
                 gridActiveKey,
                 onChangeGrid: handleChangeGrid,
                 onChangeGridActiveKey: handleChangeGridActiveKey,
+                tooltip,
+                onChangeTooltip: handleChangeTooltip,
             }}
         >
             <StyleContainer>
