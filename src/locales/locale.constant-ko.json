@@ -113,7 +113,8 @@
             "title": "애니메이션"
         },
         "tooltip": {
-            "title": "툴팁"
+            "title": "툴팁",
+            "show-content": "Show content"
         },
         "trigger": {
             "title": "트리거"
@@ -136,5 +137,11 @@
         "shadow-blur": "그림자 번짐",
         "shadow-offset-x": "그림자 X 위치",
         "shadow-offset-y": "그림자 Y 위치"
+    },
+    "event": {
+        "mousemove": "Mousemove",
+        "click": "Click",
+        "mousemove-click": "Mousemove|Click",
+        "none": "None"
     }
 }

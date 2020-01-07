@@ -10,6 +10,7 @@ import {
     Tooltip,
     Col,
     Icon,
+    Slider,
 } from 'antd';
 import { FormProps as AntFormProps, ValidationRule } from 'antd/lib/form';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -36,6 +37,7 @@ export type FormComponentType = 'divider'
 | 'password'
 | 'color'
 | 'form'
+| 'slider'
 ;
 
 export type FormSchema = MultipleFormConfig | FormConfig;
@@ -291,6 +293,9 @@ class Form extends Component<FormProps, IState> {
                         {Object.keys(forms).map(formKey => this.createFormItem(`${key}.${formKey}`, (forms as MultipleFormConfig)[formKey]))}
                     </div>
                 )
+                break;
+            case 'slider':
+                component = <Slider style={style} min={min} max={max} />;
                 break;
             default:
                 component = <Input ref={ref} onPressEnter={onPressEnter} style={style} minLength={min} maxLength={max} placeholder={placeholder} disabled={disabled} />;
