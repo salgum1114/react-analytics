@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import { register } from './serviceWorker';
 import App from './App';
@@ -13,7 +14,9 @@ const render = (Component: any) => {
     const rootElement = document.getElementById('root');
     ReactDOM.render(
         <AppContainer>
-            <Component />
+            <Router>
+                <Component />
+            </Router>
         </AppContainer>,
         rootElement,
     );

@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import Helmet from 'react-helmet';
+import { Route, Switch } from 'react-router-dom';
+
 import Editor from './components/editor/Editor';
+import { Psychrometrics } from './components/chart';
+import { Layout } from 'antd';
+import { Menus } from './components/layout';
 
 class App extends Component {
     render() {
@@ -14,7 +19,19 @@ class App extends Component {
                     <link rel="shortcut icon" href={`${PUBLIC_URL}favicon.png`} />
                     <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/notosanskr.css" />
                 </Helmet>
-                <Editor />
+                <Switch>
+                    <Layout className="editor-container">
+                        <Menus />
+                        <Layout>
+                            <Route exact={true} path="/">
+                                <Editor />
+                            </Route>
+                            <Route path="/psychrometrics">
+                                <Psychrometrics />
+                            </Route>
+                        </Layout>
+                    </Layout>
+                </Switch>
             </div>
         );
     }

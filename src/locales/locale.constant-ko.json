@@ -143,5 +143,8 @@
         "click": "Click",
         "mousemove-click": "Mousemove|Click",
         "none": "None"
+    },
+    "dashboard": {
+        "dashboard": "대시보드"
     }
 }

@@ -1,14 +1,12 @@
-import React, { Component, ErrorInfo } from 'react';
+import React, { Component } from 'react';
 import { Layout } from 'antd';
+import { SelectParam } from 'antd/lib/menu';
 
 import { i18nClient } from '../../i18n';
-
-import { Sider, Content } from '../layout';
-
-import '../../styles/index.less';
+import { Sider, Content, Menus } from '../layout';
 import StructureContainer from '../../containers/StructureContainer';
-import { SelectParam } from 'antd/lib/menu';
 import { ErrorBoundary } from '../error';
+import '../../styles/index.less';
 
 i18nClient();
 
