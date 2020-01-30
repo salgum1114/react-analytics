@@ -8,7 +8,7 @@ export interface ColorPickerProps {
     onChange?: (color: any) => void;
 }
 
-const ColorPicker: React.SFC<ColorPickerProps> = React.forwardRef(props => {
+const ColorPicker: React.SFC<ColorPickerProps> = props => {
     const { value, onChange } = props;
     const [color, setColor] = useState('#fff');
     useEffect(() => {
@@ -37,6 +37,6 @@ const ColorPicker: React.SFC<ColorPickerProps> = React.forwardRef(props => {
             <Button shape="circle" style={{ backgroundColor: color }} />
         </Dropdown>
     );
-})
+}
 
 export default ColorPicker;

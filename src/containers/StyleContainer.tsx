@@ -66,16 +66,16 @@ const StyleContainer: React.SFC = props => {
         setGridActiveKey(activeKey);
     }
     useEffect(() => {
-        console.log('structureSeries updated');
+        // console.log('structureSeries updated');
     }, [structrue.series]);
     useEffect(() => {
-        console.log('structureXAxis updated');
+        // console.log('structureXAxis updated');
     }, [structrue.xAxis]);
     useEffect(() => {
-        console.log('structureYAxis updated');
+        // console.log('structureYAxis updated');
     }, [structrue.yAxis]);
     useEffect(() => {
-        console.log('structureGrid updated');
+        // console.log('structureGrid updated');
         setGrid(Object.keys(structrue.grid).reduce((prev, curr) => {
             return Object.assign(prev, { [curr]: grid[curr] });
         }, {}));

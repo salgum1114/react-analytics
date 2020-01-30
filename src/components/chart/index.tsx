@@ -1,1 +1,1 @@
-export { default as Psychrometrics } from './Psychrometrics';
+export { default as Psychrometrics } from './psychrometrics';

@@ -50,7 +50,7 @@ class Resizer extends Component<IProps, IState> {
         const { children, style, className } = this.props;
         const { width, height } = this.state;
         return (
-            <div style={{ width: '100%', height: '100%', ...style }} className={className} ref={this.container}>
+            <div ref={this.container} style={{ width: '100%', height: '100%', ...style }} className={className}>
                 {children(width, height)}
             </div>
         );
