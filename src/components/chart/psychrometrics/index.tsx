@@ -154,10 +154,15 @@ class Psychrometrics extends Component<{}, IState> {
             .tickValues(this.humidityHandler.constantHumidities().map(ω => pvFromw(ω, totalPressure)))
             // @ts-ignore
             .tickFormat(d => wFromPv(d, totalPressure).toFixed(3)),
-        yAxisLabelHumidity: () => this.getChart().append('text')
-            .text('ω')
-            .attr('x', this.getXScale()(maxTempF + 4))
-            .attr('y', this.getYScale()(this.getMaxPv() / 2)),
+        yAxisLabelHumidity: () => {
+            const humidityAxisX = this.getXScale()(maxTempF + 4);
+            const humidityAxisY = this.getYScale()(this.getMaxPv() / 2);
+            this.getChart().append('text')
+            .text('Humidity Ratio / ω')
+            .attr('x', humidityAxisX)
+            .attr('y', humidityAxisY)
+            .attr('transform', `rotate(-90, ${humidityAxisX}, ${humidityAxisY})`)
+        },
         yAxisLabelV: () => {
             const pvAxisX = this.getXScale()(this.getPvAxisTemp() + 5);
             const pvAxisY = this.getYScale()(this.getMaxPv() / 2);
@@ -753,7 +758,38 @@ class Psychrometrics extends Component<{}, IState> {
             // @ts-ignore
             .attr('cx', d => this.getXScale()(d.temperature))
             // @ts-ignore
-            .attr('cy', d => this.getYScale()(d.pv));
+            .attr('cy', d => this.getYScale()(d.pv))
+            .on('mouseover', function(d: StatePointω) {
+                const self = this as SVGCircleElement;
+                console.log('mouseover', d);
+                d3.select('#state-circles').selectAll('circle')
+                .transition()
+                .duration(300)
+                .style('opacity', 0.2);
+                d3.select(self)
+                .transition()
+                .duration(300)
+                .style('opacity', 1)
+                .attr('r', 8);
+                d3.select('.tooltip')
+                .html(`
+                <div className="tooltip-content">
+                    <div style="display: flex; flex-direction: column;">
+                        <div>Name: ${d.name}</div>
+                        <div>Temperature: ${d.temperature}°F</div>
+                        <div>Humidity Ratio: ${d.humidityRatio}</div>
+                        <div>Pv: ${d.pv}</div>
+                    </div>
+                </div>
+                `)
+            })
+            .on('mouseout', (d) => {
+                d3.select('#state-circles').selectAll('circle')
+                .transition()
+                .duration(300)
+                .style('opacity', 1)
+                .attr('r', 5);
+            });
             selection.exit().remove();
         },
         add: () => {
@@ -808,7 +844,7 @@ class Psychrometrics extends Component<{}, IState> {
 
             // Humidity render
             this.humidityHandler.createSepcificHumidityLines();
-            // this.humidityHandler.createRHLines();
+            this.humidityHandler.createRHLines();
 
             // X-axis render
             this.axisHandler.createXAxisTemp();
@@ -858,7 +894,8 @@ class Psychrometrics extends Component<{}, IState> {
     render() {
         const { width, height } = this.state;
         return (
-            <div ref={this.chartContainerRef} style={{ width: '100%', height: '100%' }}>
+            <div ref={this.chartContainerRef} className="chart-container">
+                <div className="tooltip" />
                 <svg id={this.id} style={{ width, height }} />
             </div>
         );
