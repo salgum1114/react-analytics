@@ -38,6 +38,7 @@ import {
     Rda,
 } from './Core';
 import StatePointω from './StatePointω';
+import { IWetBulbLine } from './model';
 
 interface IState {
     width: number;
@@ -67,11 +68,28 @@ class Psychrometrics extends Component<{}, IState> {
         this.createObserver();
     }
 
-    componentDidUpdate() {
-        d3.select('#temp-lines')
-        .selectAll('path')
-        // @ts-ignore
-        .attr('d', d => this.getSaturationLine()(d))
+    componentDidUpdate(prevProps: {}, prevState: IState) {
+        if (prevState.width !== this.state.width
+        || prevState.height !== this.state.height) {
+            // Boundary
+            this.boundaryHandler.redraw();
+            // Temperature
+            this.temperatureHandler.redraw();
+            // Humidy
+            this.humidityHandler.redraw();
+            // Enthalpy
+            this.enthalpyHandler.redraw();
+            // V lines
+            this.vHandler.redraw();
+            // Wetbulb
+            this.wetBulbHandler.redraw();
+            // DewPoint
+            this.dewPointHandler.redraw();
+            // StatePointω
+            this.statePointωHandler.redraw();
+            // Axis
+            this.axisHandler.redraw();
+        }
     }
 
     componentWillUnmount() {
@@ -158,6 +176,7 @@ class Psychrometrics extends Component<{}, IState> {
             const humidityAxisX = this.getXScale()(maxTempF + 4);
             const humidityAxisY = this.getYScale()(this.getMaxPv() / 2);
             this.getChart().append('text')
+            .attr('id', 'yAxisHumidLabel')
             .text('Humidity Ratio / ω')
             .attr('x', humidityAxisX)
             .attr('y', humidityAxisY)
@@ -167,17 +186,19 @@ class Psychrometrics extends Component<{}, IState> {
             const pvAxisX = this.getXScale()(this.getPvAxisTemp() + 5);
             const pvAxisY = this.getYScale()(this.getMaxPv() / 2);
             this.getChart().append('text')
+            .attr('id', 'yAxisVLabel')
             .text('Vapor Press. / psia')
             .attr('x', pvAxisX)
             .attr('y', pvAxisY)
             .attr('transform', `rotate(-90, ${pvAxisX}, ${pvAxisY})`);
         },
         xAxisLabelTemp: () => this.getChart().append('text')
+            .attr('id', 'xAxisTempLabel')
             .text('Dry bulb temperature / °F')
             .attr('x', this.getMiddleX())
             .attr('y', this.getYScale()(-0.05)),
         createXAxisTemp: () => {
-            const selection = d3.select('#x-axis');
+            const selection = d3.select('#xAxisTemp');
             selection.attr('transform', `translate(0, ${this.getYScale()(-0.005)})`);
             const xAxis = this.axisHandler.xAxisTempF();
             selection.call(xAxis);
@@ -190,10 +211,39 @@ class Psychrometrics extends Component<{}, IState> {
             this.axisHandler.yAxisLabelHumidity();
         },
         createYAxisV: () => {
-            this.getChart().append('g').attr('id', 'yAxis')
+            this.getChart().append('g').attr('id', 'yAxisV')
             .attr('transform', `translate(${this.getXScale()(this.getPvAxisTemp())}, 0)`)
             .call(this.axisHandler.yAxis());
             this.axisHandler.yAxisLabelV();
+        },
+        redraw: () => {
+            // Y-Axis V
+            d3.select('#yAxisV')
+            .attr('transform', `translate(${this.getXScale()(this.getPvAxisTemp())}, 0)`)
+            .call(this.axisHandler.yAxis());
+            const pvAxisX = this.getXScale()(this.getPvAxisTemp() + 5);
+            const pvAxisY = this.getYScale()(this.getMaxPv() / 2);
+            d3.select('#yAxisVLabel')
+            .attr('x', pvAxisX)
+            .attr('y', pvAxisY)
+            .attr('transform', `rotate(-90, ${pvAxisX}, ${pvAxisY})`);
+            // Y-Axis Humidity
+            d3.select('#yAxisHumid')
+            .attr('transform', `translate(${this.getXScale()(maxTempF + 0.5)}, 0)`)
+            .call(this.axisHandler.yAxisHumidity());
+            const humidityAxisX = this.getXScale()(maxTempF + 4);
+            const humidityAxisY = this.getYScale()(this.getMaxPv() / 2);
+            d3.select('#yAxisHumidLabel')
+            .attr('x', humidityAxisX)
+            .attr('y', humidityAxisY)
+            .attr('transform', `rotate(-90, ${humidityAxisX}, ${humidityAxisY})`);
+            // X-Axis Temperature
+            d3.select('#xAxisTemp')
+            .attr('transform', `translate(0, ${this.getYScale()(-0.005)})`)
+            .call(this.axisHandler.xAxisTempF());
+            d3.select('#xAxisTempLabel')
+            .attr('x', this.getMiddleX())
+            .attr('y', this.getYScale()(-0.05));
         },
     }
 
@@ -286,6 +336,27 @@ class Psychrometrics extends Component<{}, IState> {
             .attr('transform', d => `rotate(${d.rotationDegrees}, ${d.x}, ${d.y}) translate(0 -5) translate(-12 -12)`);
             selection.exit().remove();
         },
+        redraw: () => {
+            if (this.vPaths) {
+                this.vPaths.selectAll('path')
+                .data(this.vHandler.vLines())
+                .attr('d', d => this.getSaturationLine()(d.data));
+            }
+            const data = this.vHandler.vLines().filter(d => d.v % 0.5 === 0 &&
+                                                    d.labelLocation.temp > minTempF &&
+                                                    d.labelLocation.temp < maxTempF &&
+                                                    d.labelLocation.pv < this.getMaxPv());
+            d3.select('#v-labels').selectAll('text')
+            .data(data)
+            .attr('x', d => d.x)
+            .attr('y', d => d.y)
+            .attr('transform', d => `rotate(${d.rotationDegrees}, ${d.x}, ${d.y}) translate(0, -5)`);
+            d3.select('#v-label-backgrounds').selectAll('rect')
+            .data(data)
+            .attr('x', d => this.getXScale()(d.labelLocation.temp))
+            .attr('y', d => this.getYScale()(d.labelLocation.pv))
+            .attr('transform', d => `rotate(${d.rotationDegrees}, ${d.x}, ${d.y}) translate(0 -5) translate(-12 -12)`);
+        },
     }
 
     enthalpyHandler = {
@@ -349,7 +420,6 @@ class Psychrometrics extends Component<{}, IState> {
             { x: this.getUpperLeftBorderTemp(), y: this.getMaxPv() },
             { x: this.getTempAtCutOff(), y: this.getMaxPv() },
         ],
-        // @ts-ignore
         createEnthalpyBorderLines: () => this.enthalpyBorderPath.attr('d', this.getSaturationLine()(this.enthalpyHandler.enthalpyBorderLineData())).call(this.boundaryHandler.boundaryLine),
         createEnthalpyLabel: () => {
             const rise = this.getMaxPv() - this.getBottomLeftBorderPv();
@@ -368,9 +438,7 @@ class Psychrometrics extends Component<{}, IState> {
         },
         createEnthalpyLines: () => {
             let selection = this.enthalpyPaths.selectAll('path')
-                .data(this.enthalpyHandler.constEnthalpyLines()
-                // @ts-ignore
-                .filter(d => d.coords));
+                .data(this.enthalpyHandler.constEnthalpyLines().filter(d => d.coords));
             selection.enter()
             .append('path')
             // @ts-ignore
@@ -408,6 +476,37 @@ class Psychrometrics extends Component<{}, IState> {
             // @ts-ignore
             .attr('y', d => this.getYScale()(pvFromEnthalpyTemp(d, this.enthalpyHandler.tempAtStraightEnthalpyLine(d), totalPressure) + 0.005));
             selection.exit().remove();
+        },
+        redraw: () => {
+            if (this.enthalpyPaths) {
+                this.enthalpyPaths.selectAll('path')
+                .data(this.enthalpyHandler.constEnthalpyLines().filter(d => d.coords))
+                .attr('d', d => this.getSaturationLine()(d.coords));
+            }
+            if (this.hLabels) {
+                const data = this.enthalpyHandler.constEnthalpyValues().filter(h =>
+                    h % 5 === 0 &&
+                    h < enthalpyFromTempPv(this.getUpperLeftBorderTemp(), this.getMaxPv(), totalPressure),
+                );
+                this.hLabels.selectAll('text')
+                .data(data)
+                .attr('x', d => this.getXScale()(this.enthalpyHandler.tempAtStraightEnthalpyLine(d) - 0.75))
+                .attr('y', d => this.getYScale()(pvFromEnthalpyTemp(d, this.enthalpyHandler.tempAtStraightEnthalpyLine(d), totalPressure) + 0.005));
+            }
+            if (this.enthalpyBorderPath) {
+                this.enthalpyBorderPath.attr('d', this.getSaturationLine()(this.enthalpyHandler.enthalpyBorderLineData())).call(this.boundaryHandler.boundaryLine)
+            }
+            const rise = this.getMaxPv() - this.getBottomLeftBorderPv();
+            const run = this.getUpperLeftBorderTemp() - minTempF;
+            const angle = Math.atan((rise * this.getPixelsPerPsia()) / (run * this.getPixelsPerTemp())) * 180 / Math.PI;
+            const baseX = (this.getUpperLeftBorderTemp() + minTempF) / 2;
+            const baseY = (this.getMaxPv() + this.getBottomLeftBorderPv()) / 2;
+            const absBaseX = this.getXScale()(baseX);
+            const absBaseY = this.getYScale()(baseY);
+            d3.selectAll('#enthalpy-label')
+            .attr('x', absBaseX)
+            .attr('y', absBaseY)
+            .attr('transform', `rotate(${angle}, ${absBaseX}, ${absBaseY}) translate(-100 -40)`);
         },
     }
 
@@ -467,6 +566,29 @@ class Psychrometrics extends Component<{}, IState> {
                 };
             });
         },
+        redraw: () => {
+            if (this.wetBulbPaths) {
+                this.wetBulbPaths.selectAll('path')
+                .data(this.wetBulbHandler.wetBulbLines())
+                .attr('d', (d: IWetBulbLine) => this.getSaturationLine()(d.data));
+            }
+            const data = this.wetBulbHandler.wetBulbLines().filter(d =>
+                d.wetBulbTemp % 5 === 0 &&
+                d.midTemp > minTempF &&
+                d.midTemp < maxTempF &&
+                d.midPv < this.getMaxPv(),
+            );
+            d3.select('#wetbulb-labels').selectAll('text')
+            .data(data)
+            .attr('x', (d: IWetBulbLine) => this.getXScale()(d.midTemp))
+            .attr('y', (d: IWetBulbLine) => this.getYScale()(d.midPv))
+            .attr('transform', (d: IWetBulbLine) => `rotate(${d.rotationAngle}, ${d.x}, ${d.y}) translate(0 -3)`);
+            d3.select('#wetbulb-labels-backgrounds').selectAll('rect')
+            .data(data)
+            .attr('x', d => this.getXScale()(d.midTemp))
+            .attr('y', d => this.getYScale()(d.midPv))
+            .attr('transform', d => `rotate(${d.rotationAngle}, ${d.x}, ${d.y}) translate(0 -3) translate(-2 -8)`);
+        },
         createWetBulbLines: () => {
             let selection = this.wetBulbPaths.selectAll('path').data(this.wetBulbHandler.wetBulbLines());
             selection.enter()
@@ -477,8 +599,7 @@ class Psychrometrics extends Component<{}, IState> {
             .attr('stroke', 'orange')
             .attr('stroke-dasharray', '1 1')
             .attr('stroke-width', 0.5)
-            // @ts-ignore
-            .attr('d', d => this.getSaturationLine()(d.data));
+            .attr('d', (d: IWetBulbLine) => this.getSaturationLine()(d.data));
             selection.exit().remove();
 
             const data = this.wetBulbHandler.wetBulbLines().filter(d =>
@@ -487,22 +608,16 @@ class Psychrometrics extends Component<{}, IState> {
                 d.midTemp < maxTempF &&
                 d.midPv < this.getMaxPv(),
             );
-            // @ts-ignore
             selection = d3.select('#wetbulb-labels').selectAll('text').data(data);
             selection.enter()
             .append('text')
-            // @ts-ignore
             .merge(selection)
             .attr('class', 'ticks')
             .style('font-size', '8px')
-            // @ts-ignore
-            .text(d => d.wetBulbTemp.toFixed(0))
-            // @ts-ignore
-            .attr('x', d => this.getXScale()(d.midTemp))
-            // @ts-ignore
-            .attr('y', d => this.getYScale()(d.midPv))
-            // @ts-ignore
-            .attr('transform', d => `rotate(${d.rotationAngle}, ${d.x}, ${d.y}) translate(0 -3)`);
+            .text((d: IWetBulbLine) => d.wetBulbTemp.toFixed(0))
+            .attr('x', (d: IWetBulbLine) => this.getXScale()(d.midTemp))
+            .attr('y', (d: IWetBulbLine) => this.getYScale()(d.midPv))
+            .attr('transform', (d: IWetBulbLine) => `rotate(${d.rotationAngle}, ${d.x}, ${d.y}) translate(0 -3)`);
             selection.exit().remove();
 
             // @ts-ignore
@@ -538,12 +653,20 @@ class Psychrometrics extends Component<{}, IState> {
             { x: maxTempF, y: satPressFromTempIp(tempFromRhAndPv(1, this.getMaxPv())) },
             { x: maxTempF, y: 0 },
         ],
+        redraw: () => d3.select('#boundary-lines').select('path')
+            .attr('d', `${this.getSaturationLine()(this.boundaryHandler.boundaryLineData())} Z`),
         createBoundaryLines: () => d3.select('#boundary-lines').select('path')
-        // @ts-ignore
             .attr('d', `${this.getSaturationLine()(this.boundaryHandler.boundaryLineData())} Z`),
     }
 
     dewPointHandler = {
+        redraw: () => {
+            d3.select('#dewpointlabels').selectAll('text')
+            .data(this.temperatureHandler.constantTemps().filter(temp => temp % 5 === 0 && satPressFromTempIp(temp) < this.getMaxPv()))
+            .attr('x', d => this.getXScale()(d))
+            // @ts-ignore
+            .attr('y', d => this.getYScale()(satPressFromTempIp(d) + 0.003));
+        },
         createDewPointLabels: () => {
             const selection = d3.select('#dewpointlabels').selectAll('text')
             .data(this.temperatureHandler.constantTemps().filter(temp => temp % 5 === 0 && satPressFromTempIp(temp) < this.getMaxPv()));
@@ -568,6 +691,12 @@ class Psychrometrics extends Component<{}, IState> {
         startTemp: () => Math.round(minTempF + (maxTempF - minTempF) * 0.6),
         constantTempLines: () => this.temperatureHandler.constantTemps().map(temp => [{ x: temp, y: 0 }, { x: temp, y: satPressFromTempIp(temp) }]),
         constantTemps: () => range(minTempF, maxTempF, 1),
+        redraw: () => {
+            d3.select('#temp-lines')
+            .selectAll('path')
+            .data(this.temperatureHandler.constantTempLines())
+            .attr('d', d => this.getSaturationLine()(d));
+        },
         createTempLines: () => {
             const selection = d3.select('#temp-lines')
             .selectAll('path')
@@ -633,18 +762,41 @@ class Psychrometrics extends Component<{}, IState> {
                 y: this.getYScale()(pv),
             };
         }),
+        redraw: () => {
+            d3.select('#specific-humidity-lines')
+            .selectAll('path')
+            .data(this.humidityHandler.constantHumidityLines())
+            .attr('d', d => this.getSaturationLine()(d));
+            d3.select('#rh-lines')
+            .selectAll('path')
+            .data(this.humidityHandler.constRHLines())
+            .attr('d', d => this.getSaturationLine()(d.data));
+            const height = 12;
+            const labelData = this.humidityHandler.constRHLines().filter(d => d.pv < this.getMaxPv());
+            d3.select('#rh-label-background')
+            .selectAll('rect')
+            .data(labelData)
+            .attr('x', d => this.getXScale()(d.temp))
+            .attr('y', d => this.getYScale()(d.pv))
+            .attr('transform', d => `rotate(${d.rotationDegrees}, ${d.x}, ${d.y}) translate(-2 -${height + 2})`);
+            if (this.rhticks) {
+                this.rhticks.selectAll('text')
+                .data(labelData)
+                .attr('x', d => d.x)
+                .attr('y', d => d.y)
+                .attr('transform', d => `rotate(${d.rotationDegrees}, ${d.x}, ${d.y}) translate(0 -3)`);
+            }
+        },
         createSepcificHumidityLines: () => {
             const selection = d3.select('#specific-humidity-lines')
             .selectAll('path')
             .data(this.humidityHandler.constantHumidityLines());
             selection.enter()
             .append('path')
-            // @ts-ignore
             .merge(selection)
             .attr('fill', 'none')
             .attr('stroke', 'blue')
             .attr('stroke-width', 0.5)
-            // @ts-ignore
             .attr('d', d => this.getSaturationLine()(d));
             selection.exit().remove();
         },
@@ -804,6 +956,30 @@ class Psychrometrics extends Component<{}, IState> {
                 statePointωs: this.state.statePointωs.filter(s => s.id === statePointω.id),
             });
         },
+        redraw: () => {
+            d3.select('#state-text').selectAll('text')
+            .data(this.state.statePointωs)
+            .attr('x', d => this.getXScale()(d.temperature))
+            .attr('y', d => this.getYScale()(d.pv));
+            const rightOffset = 10;
+            // Once the text has been created we can get the
+            // the size of the bounding box to put the background
+            // behind.
+            const boundingBoxes = [] as any[];
+            d3.select('#state-text').selectAll('text').each(function(_d, i) {
+                const self = this as HTMLElement;
+                boundingBoxes[i] = self.getBoundingClientRect();
+            });
+            d3.select('#state-backgrounds').selectAll('rect')
+            .data(this.state.statePointωs)
+            .attr('x', d => this.getXScale()(d.temperature))
+            .attr('y', d => this.getYScale()(d.pv))
+            .attr('transform', (d, i) => `translate(${rightOffset - Math.round(boundingBoxes[i].width * 0.1 / 2)}, -25)`);
+            d3.select('#state-circles').selectAll('circle')
+            .data(this.state.statePointωs)
+            .attr('cx', d => this.getXScale()(d.temperature))
+            .attr('cy', d => this.getYScale()(d.pv));
+        },
     }
 
     createChart = () => {
@@ -811,7 +987,7 @@ class Psychrometrics extends Component<{}, IState> {
             const chart = this.getChart();
             this.vPaths = chart.append('g').attr('id', 'vpaths');
             chart.append('g').attr('id', 'specific-humidity-lines');
-            chart.append('g').attr('id', 'x-axis');
+            chart.append('g').attr('id', 'xAxisTemp');
             this.wetBulbPaths = chart.append('g').attr('id', 'wetbulb-lines');
             chart.append('g').attr('id', 'yAxisHumid');
             this.enthalpyPaths = chart.append('g').attr('id', 'enthalpyLines');
