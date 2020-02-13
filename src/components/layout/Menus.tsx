@@ -12,8 +12,12 @@ const Menus = () => {
                     <Icon type="dashboard" />
                     <span>{i18next.t('dashboard.dashboard')}</span>
                 </Menu.Item>
-                <Menu.Item onClick={() => history.push('/psychrometrics')}>
+                <Menu.Item onClick={() => history.push('/psychrometrics/kelvin')}>
                     <Icon type="line-chart" />
+                    <span>{i18next.t('dashboard.dashboard')}</span>
+                </Menu.Item>
+                <Menu.Item onClick={() => history.push('/psychrometrics/celsius')}>
+                    <Icon type="pie-chart" />
                     <span>{i18next.t('dashboard.dashboard')}</span>
                 </Menu.Item>
             </Menu>

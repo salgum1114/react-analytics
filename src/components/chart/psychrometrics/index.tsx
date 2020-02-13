@@ -36,6 +36,8 @@ import {
     wetBulbRh,
     xOffsetPercentRight,
     Rda,
+    convertFahrenheitToCelsius,
+    getRandomInt,
 } from './Core';
 import StatePointω from './StatePointω';
 import { IWetBulbLine } from './model';
@@ -162,7 +164,8 @@ class Psychrometrics extends Component<{}, IState> {
         // @ts-ignore
         xAxisTempF: () => d3.axisBottom()
             .scale(this.getXScale())
-            .tickValues(range(minTempF, maxTempF, 5).filter(temp => temp % 5 === 0)),
+            .tickValues(range(minTempF, maxTempF, 5).filter(temp => temp % 5 === 0))
+            .tickFormat(d => convertFahrenheitToCelsius(d).toFixed(3)),
         // @ts-ignore
         yAxis: () => d3.axisRight()
             .scale(this.getYScale()),
@@ -194,7 +197,7 @@ class Psychrometrics extends Component<{}, IState> {
         },
         xAxisLabelTemp: () => this.getChart().append('text')
             .attr('id', 'xAxisTempLabel')
-            .text('Dry bulb temperature / °F')
+            .text('Dry bulb temperature / °C')
             .attr('x', this.getMiddleX())
             .attr('y', this.getYScale()(-0.05)),
         createXAxisTemp: () => {
@@ -928,7 +931,7 @@ class Psychrometrics extends Component<{}, IState> {
                 <div className="tooltip-content">
                     <div style="display: flex; flex-direction: column;">
                         <div>Name: ${d.name}</div>
-                        <div>Temperature: ${d.temperature}°F</div>
+                        <div>Temperature: ${convertFahrenheitToCelsius(d.temperature).toFixed(3)}°C</div>
                         <div>Humidity Ratio: ${d.humidityRatio}</div>
                         <div>Pv: ${d.pv}</div>
                     </div>
@@ -945,7 +948,7 @@ class Psychrometrics extends Component<{}, IState> {
             selection.exit().remove();
         },
         add: () => {
-            const statePointω = new StatePointω(maxTempF, maxω, `State ${this.state.statePointωs.length + 1}`, totalPressure);
+            const statePointω = new StatePointω(getRandomInt(minTempF, maxTempF), maxω, `State ${this.state.statePointωs.length + 1}`, totalPressure);
             this.state.statePointωs.push(statePointω);
             this.setState({
                 statePointωs: this.state.statePointωs,
@@ -1050,8 +1053,8 @@ class Psychrometrics extends Component<{}, IState> {
 
             // Render StatePointωs
             this.statePointωHandler.add();
-            this.statePointωHandler.add();
-            this.statePointωHandler.add();
+            // this.statePointωHandler.add();
+            // this.statePointωHandler.add();
         } catch (error) {
             console.error(error);
         }

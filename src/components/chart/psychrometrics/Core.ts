@@ -21,6 +21,10 @@ export const Rda = 53.35; // Dry air gas constant, ft-lbf / lbda-R
 
 export const constantRHvalues = [10, 20, 30, 40, 50, 60, 70, 80, 90];
 
+export const convertFahrenheitToCelsius = (temp: number): number => (temp - 32) / 1.8;
+
+export const convertCelsiusToFahrenheit = (temp: number): number => (temp * 1.8) + 32;
+
 export const getRandomInt = (min: number, max: number) => {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -59,7 +63,7 @@ export const range = (min: any, max: any, stepsize: number) => {
     return toReturn;
 }
 
-// Saturation pressure in psi from temp in °F.
+// Saturation pressure in psia from temp in °F. Pws
 export const satPressFromTempIp = (temp: number) => {
     const t = temp + 459.67;
     const lnOfSatPress =
