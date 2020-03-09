@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/salgum1114/react-analytics#readme",
   "dependencies": {
-    "antd": "^3.26.4",
+    "antd": "^4.0.2",
     "classnames": "^2.2.6",
     "css-element-queries": "^1.2.2",
     "d3": "^5.15.0",

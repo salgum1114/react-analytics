@@ -17,7 +17,7 @@ import i18next from 'i18next';
 import isEmpty from 'lodash/isEmpty';
 
 import DynamicForm from './DynamicForm';
-import { FormSchema, FormConfig, MultipleFormConfig } from './Form';
+import { FormSchema, FormConfig, MultipleFormConfig } from './LegacyForm';
 
 export interface FormItemProps {
     /**
@@ -193,11 +193,11 @@ class FormItem extends Component<FormItemProps, IState> {
                 </Tooltip>
             </>
         ) : (
-            <>
-                {icon ? <Icon type={icon} /> : null}
-                <span>{label}</span>
-            </>
-        );
+                <>
+                    {icon ? <Icon type={icon} /> : null}
+                    <span>{label}</span>
+                </>
+            );
         return (
             <React.Fragment key={key}>
                 <Col md={24} lg={span || 24}>
