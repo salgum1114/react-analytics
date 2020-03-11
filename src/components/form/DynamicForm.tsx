@@ -107,7 +107,6 @@ class DynamicForm extends Component<DynamicFormProps> {
 	};
 
 	handleValuesChange = (changedValues: any, allValues: any, formKey: string) => {
-		console.log(changedValues, allValues, formKey);
 		const targetDatas = Object.assign({}, this.state.datas[formKey], allValues);
 		const datas = Object.assign({}, this.state.datas, { [formKey]: targetDatas });
 		const { onChange } = this.props;

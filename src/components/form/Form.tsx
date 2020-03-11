@@ -280,7 +280,7 @@ const Form = React.forwardRef<any, FormProps>((props, ref) => {
 				);
 				break;
 			case 'dynamic':
-				component = <DynamicForm formSchema={forms} label={header} value={values} />;
+				component = <DynamicForm formSchema={forms} label={header} />;
 				break;
 			case 'color':
 				component = <ColorPicker />;
