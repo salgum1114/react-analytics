@@ -144,34 +144,25 @@ class DynamicForm extends Component<DynamicFormProps> {
 		return (
 			<div className="dynamic-form">
 				{datasLength ? (
-					<Collapse activeKey={activeKey} onChange={this.handleChangeActiveKey}>
-						{Object.keys(datas).map((key, index) => {
-							return (
-								<Collapse.Panel
-									key={key}
-									header={`${label}_${index}`}
-									extra={[
-										cloneButton && (
-											<CopyOutlined
-												key="copy"
-												className="action-icon"
-												onClick={e => {
-													e.stopPropagation();
-													this.handleCloneForm(datas[key]);
-												}}
-											/>
-										),
-										deleteButton && datasLength > 1 ? (
-											<DeleteOutlined
-												key="delete"
-												className="action-icon"
-												onClick={e => {
-													e.stopPropagation();
-													this.handleRemoveForm(key);
-												}}
-											/>
-										) : (
-											allDelete && (
+					<Form.Provider onFormFinish={(name, info) => console.log(name, info)}>
+						<Collapse activeKey={activeKey} onChange={this.handleChangeActiveKey}>
+							{Object.keys(datas).map((key, index) => {
+								return (
+									<Collapse.Panel
+										key={key}
+										header={`${label}_${index}`}
+										extra={[
+											cloneButton && (
+												<CopyOutlined
+													key="copy"
+													className="action-icon"
+													onClick={e => {
+														e.stopPropagation();
+														this.handleCloneForm(datas[key]);
+													}}
+												/>
+											),
+											deleteButton && datasLength > 1 ? (
 												<DeleteOutlined
 													key="delete"
 													className="action-icon"
@@ -180,24 +171,35 @@ class DynamicForm extends Component<DynamicFormProps> {
 														this.handleRemoveForm(key);
 													}}
 												/>
-											)
-										),
-									]}
-								>
-									<Form
-										{...other}
-										ref={(c: any) => {
-											this.forms[key] = c;
-										}}
-										formSchema={formSchema}
-										formKey={key}
-										onValuesChange={debounce(this.handleValuesChange, delay < 0 ? 0 : delay)}
-										values={datas[key]}
-									/>
-								</Collapse.Panel>
-							);
-						})}
-					</Collapse>
+											) : (
+												allDelete && (
+													<DeleteOutlined
+														key="delete"
+														className="action-icon"
+														onClick={e => {
+															e.stopPropagation();
+															this.handleRemoveForm(key);
+														}}
+													/>
+												)
+											),
+										]}
+									>
+										<Form
+											{...other}
+											ref={(c: any) => {
+												this.forms[key] = c;
+											}}
+											formSchema={formSchema}
+											formKey={key}
+											onValuesChange={debounce(this.handleValuesChange, delay < 0 ? 0 : delay)}
+											values={datas[key]}
+										/>
+									</Collapse.Panel>
+								);
+							})}
+						</Collapse>
+					</Form.Provider>
 				) : (
 					<Empty />
 				)}

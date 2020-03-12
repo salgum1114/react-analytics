@@ -50,7 +50,22 @@ const StructureContainer: React.SFC = props => {
 			show: false,
 		},
 	});
-	const [tooltip, setTooltip] = useState({});
+	const [tooltip, setTooltip] = useState<echarts.EChartOption.Tooltip>({
+		show: true,
+		showContent: true,
+		alwaysShowContent: true,
+		trigger: 'item',
+		triggerOn: 'mousemove|click',
+		showDelay: 0,
+		hideDelay: 100,
+		transitionDuration: 0.4,
+		enterable: true,
+		confine: false,
+		renderMode: 'html',
+		axisPointer: {
+			show: true,
+		},
+	});
 	const [xAxisActiveKey, setXAxisActiveKey] = useState([]);
 	const [seriesActiveKey, setSeriesActiveKey] = useState([]);
 	const [yAxisActiveKey, setYAxisActiveKey] = useState([]);

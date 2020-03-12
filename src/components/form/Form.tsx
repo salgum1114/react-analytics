@@ -3,7 +3,6 @@ import { Form as AntForm, Col, Row, Tooltip, Input, Slider, Select, InputNumber,
 import { Rule, FormInstance, FormProps as AntFormProps } from 'antd/lib/form';
 import isEmpty from 'lodash/isEmpty';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import FormItem from 'antd/lib/form/FormItem';
 import i18next from 'i18next';
 
 import { ColorPicker } from '../picker';
@@ -42,7 +41,7 @@ export interface SelectItemConfig {
 	forms?: FormSchema;
 }
 
-export type SelectMode = 'default' | 'multiple' | 'tags' | 'combobox';
+export type SelectMode = 'multiple' | 'tags';
 
 export interface FormConfig {
 	type?: FormComponentType;
@@ -77,7 +76,7 @@ export interface FormConfig {
 	/**
 	 * Required Component when type is Custom
 	 */
-	component?: React.ComponentClass<any>;
+	component?: React.ComponentType<any>;
 	/**
 	 * Required Mode when type is Select
 	 */
@@ -90,7 +89,7 @@ export interface FormConfig {
 	 * If type is dynamic, require header
 	 */
 	header?: React.ReactNode;
-	ref?: React.Ref<any>;
+	step?: number;
 }
 
 export interface FormProps extends Omit<AntFormProps, 'onValuesChange'> {
@@ -107,7 +106,7 @@ export interface FormProps extends Omit<AntFormProps, 'onValuesChange'> {
 	children?: React.ReactNode;
 }
 
-const Form = React.forwardRef<any, FormProps>((props, ref) => {
+const WrappedForm = React.forwardRef<FormInstance, FormProps>((props, ref) => {
 	const { formKey, gutter = 16, formSchema, onValuesChange, values, layout = 'vertical', ...other } = props;
 	const [selectedValues, setSelectedValues] = useState<Record<string, any>>({});
 	const [errors, setErrors] = useState<Record<string, any>>({});
@@ -117,20 +116,19 @@ const Form = React.forwardRef<any, FormProps>((props, ref) => {
 	const handleValidate = (errors: any) => {
 		setErrors(errors);
 	};
-	const handleDefaultValidator = (_rule: any, _value: any, callback: (errors?: any) => void) => {
-		console.log(callback);
-		if (errors && errors.length) {
-			callback(errors);
-			return;
-		}
-		callback();
-	};
+	// const handleDefaultValidator = async (_rule: any, _value: any, callback: (errors?: any) => void) => {
+	// 	console.log(errors);
+	// 	if (errors && errors.length) {
+	// 		throw errors;
+	// 	}
+	// 	// callback();
+	// };
 	const handleValuesChange = (changedValues: any, allValues: any) => {
 		if (onValuesChange) {
 			onValuesChange(changedValues, allValues, formKey);
 		}
 	};
-	const createFormItem = (key: string, formConfig: FormConfig) => {
+	const createFormItem = (key: string | string[], formConfig: FormConfig) => {
 		const { colon = false, values, form } = props;
 		let component = null as any;
 		const {
@@ -158,21 +156,25 @@ const Form = React.forwardRef<any, FormProps>((props, ref) => {
 			onPressEnter,
 			ref,
 			initialValue,
+			step,
 		} = formConfig;
-		let value = !isEmpty(values)
-			? key.split('.').reduce((prev, curr) => {
-					if (typeof prev !== 'object') {
-						return prev;
-					}
-					return prev[curr];
-			  }, values)
-			: initialValue;
+		let value: any;
+		if (Array.isArray(key)) {
+			value = !isEmpty(values)
+				? key.reduce((prev, curr) => {
+						if (typeof prev !== 'object') {
+							return prev;
+						}
+						return prev[curr];
+				  }, values)
+				: initialValue;
+		}
 		if (typeof value === 'undefined') {
 			value = initialValue;
 		}
-		let newRules = required
+		let newRules: Rule[] = required
 			? [{ required: true, message: i18next.t('validation.enter-arg', { arg: label }) }]
-			: ([] as Rule[]);
+			: [];
 		if (rules) {
 			newRules = newRules.concat(rules);
 		}
@@ -180,7 +182,7 @@ const Form = React.forwardRef<any, FormProps>((props, ref) => {
 		switch (type) {
 			case 'divider':
 				component = (
-					<Divider style={style} key={key}>
+					<Divider style={style} key={key as string}>
 						{label}
 					</Divider>
 				);
@@ -236,14 +238,14 @@ const Form = React.forwardRef<any, FormProps>((props, ref) => {
 				// TODO... When value render form
 				break;
 			case 'select':
-				value = selectedValues[key] || value;
+				value = selectedValues[key as string] || value;
 				component = (
 					<Select
 						style={style}
 						mode={mode}
 						placeholder={placeholder}
 						disabled={disabled}
-						onSelect={selectedValue => handleSelect(selectedValue, key)}
+						onSelect={selectedValue => handleSelect(selectedValue, key as string)}
 					>
 						{Array.isArray(items) &&
 							items.map((item: any) => {
@@ -305,13 +307,13 @@ const Form = React.forwardRef<any, FormProps>((props, ref) => {
 					<div style={style}>
 						<span style={{ fontWeight: 'bold', marginBottom: 4 }}>{label}</span>
 						{Object.keys(forms).map(formKey =>
-							createFormItem(`${key}.${formKey}`, (forms as MultipleFormConfig)[formKey]),
+							createFormItem(Array.isArray(key) ? key.map(k => k).concat(formKey) : [key, formKey], (forms as MultipleFormConfig)[formKey]),
 						)}
 					</div>
 				);
 				break;
 			case 'slider':
-				component = <Slider style={style} min={min} max={max} />;
+				component = <Slider style={style} min={min} max={max} step={step} />;
 				break;
 			default:
 				component = (
@@ -347,12 +349,12 @@ const Form = React.forwardRef<any, FormProps>((props, ref) => {
 			newValuePropName = 'values';
 		}
 		return (
-			<React.Fragment key={key}>
+			<React.Fragment key={key as string}>
 				<Col md={24} lg={span || 24}>
 					{type === 'form' ? (
 						component
 					) : (
-						<FormItem
+						<AntForm.Item
 							colon={colon}
 							label={label ? newLabel : null}
 							help={help}
@@ -363,7 +365,7 @@ const Form = React.forwardRef<any, FormProps>((props, ref) => {
 							name={key}
 						>
 							{component}
-						</FormItem>
+						</AntForm.Item>
 					)}
 				</Col>
 				{selectFormItems}
@@ -382,5 +384,16 @@ const Form = React.forwardRef<any, FormProps>((props, ref) => {
 		</AntForm>
 	);
 });
+
+type Form = typeof WrappedForm
+& {
+	Item: typeof AntForm.Item;
+	Provider: typeof AntForm.Provider;
+}
+
+const Form: Form = WrappedForm as Form;
+
+Form.Item = AntForm.Item;
+Form.Provider = AntForm.Provider;
 
 export default Form;

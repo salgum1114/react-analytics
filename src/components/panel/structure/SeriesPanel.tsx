@@ -94,17 +94,10 @@ class SeriesPanel extends Component<{}, IState> {
 							type: {
 								label: i18next.t('common.type'),
 								type: 'select',
-								style: { width: '100%' },
 								items: [
 									{
 										label: i18next.t('chart.line'),
 										value: 'line',
-										forms: {
-											label: {
-												label: i18next.t('chart.line'),
-												type: 'text',
-											},
-										},
 									},
 									{
 										label: i18next.t('chart.bar'),

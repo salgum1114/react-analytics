@@ -21,7 +21,8 @@ class TooltipPanel extends Component<{}, IState> {
         }
     }
 
-    handleValuesChange = (allValues: any) => {
+    handleValuesChange = (changedValues: any, allValues: any) => {
+        console.log(changedValues, allValues);
         this.context.onChangeTooltip(allValues);
     }
 
@@ -40,19 +41,16 @@ class TooltipPanel extends Component<{}, IState> {
                             show: {
                                 label: i18next.t('common.visible'),
                                 type: 'boolean',
-                                initialValue: true,
                                 span: 8,
                             },
                             showContent: {
                                 label: i18next.t('widget.tooltip.show-content'),
                                 type: 'boolean',
-                                initialValue: true,
                                 span: 8,
                             },
                             alwaysShowContent: {
                                 label: i18next.t('widget.tooltip.always-show-content'),
                                 type: 'boolean',
-                                initialValue: true,
                                 span: 8,
                             },
                             trigger: {
@@ -77,7 +75,6 @@ class TooltipPanel extends Component<{}, IState> {
                             triggerOn: {
                                 label: i18next.t('widget.tooltip.trigger-on'),
                                 type: 'select',
-                                initialValue: 'mousemove|click',
                                 items: [
                                     {
                                         label: i18next.t('event.mousemove'),
@@ -100,38 +97,33 @@ class TooltipPanel extends Component<{}, IState> {
                             showDelay: {
                                 label: i18next.t('widget.tooltip.show-delay'),
                                 type: 'number',
-                                initialValue: 0,
                                 span: 12,
                             },
                             hideDelay: {
                                 label: i18next.t('widget.tooltip.hide-delay'),
                                 type: 'number',
-                                initialValue: 100,
                                 span: 12,
                             },
                             transitionDuration: {
                                 label: i18next.t('widget.tooltip.transition-duration'),
                                 type: 'slider',
-                                initialValue: 0.4,
+                                step: 0.1,
                                 min: 0,
                                 max: 1,
                             },
                             enterable: {
                                 label: i18next.t('widget.tooltip.enterable'),
                                 type: 'boolean',
-                                initialValue: true,
                                 span: 12,
                             },
                             confine: {
                                 label: i18next.t('widget.tooltip.confine'),
                                 type: 'boolean',
-                                initialValue: false,
                                 span: 12,
                             },
                             renderMode: {
                                 label: i18next.t('widget.tooltip.renderMode'),
                                 type: 'select',
-                                initialValue: 'html',
                                 items: [
                                     {
                                         label: i18next.t('common.html'),
@@ -143,9 +135,9 @@ class TooltipPanel extends Component<{}, IState> {
                                     },
                                 ],
                             },
-                            position: {
+                            // position: {
 
-                            },
+                            // },
                             axisPointer: {
                                 label: i18next.t('widget.axis-pointer.title'),
                                 type: 'form',
