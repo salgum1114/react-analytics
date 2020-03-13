@@ -90,6 +90,7 @@ export interface FormConfig {
 	 */
 	header?: React.ReactNode;
 	step?: number;
+	ref?: React.Ref<any>;
 }
 
 export interface FormProps extends Omit<AntFormProps, 'onValuesChange'> {
@@ -154,9 +155,9 @@ const WrappedForm = React.forwardRef<FormInstance, FormProps>((props, ref) => {
 			forms,
 			header,
 			onPressEnter,
-			ref,
 			initialValue,
 			step,
+			ref,
 		} = formConfig;
 		let value: any;
 		if (Array.isArray(key)) {
