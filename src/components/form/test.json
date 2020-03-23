@@ -1,0 +1,285 @@
+{
+	"headers": {
+		"Date": ["Tue, 17 Mar 2020 04:30:26 GMT"],
+		"Content-Type": ["application/json"],
+		"Content-Length": ["4005"],
+		"Connection": ["keep-alive"],
+		"x-amzn-RequestId": ["3326103a-a2f3-4bb3-96d2-93c29104e718"],
+		"x-amz-apigw-id": ["JhHPbEXfoE0FTZw="],
+		"X-Amzn-Trace-Id": ["Root=1-5e705262-8653502326579b564d8570e7;Sampled=0"]
+	},
+	"body": {
+		"response": {
+			"command": "SELECT",
+			"rowCount": 14,
+			"oid": null,
+			"rows": [
+				{
+					"dga_acq_date": "2019-01-01T00:00:00.000Z",
+					"h2": "5.300000",
+					"ch4": "16.900000",
+					"c2h4": "9.600000",
+					"c2h6": "7.500000",
+					"c2h2": "0.000000",
+					"co": "171.800003"
+				},
+				{
+					"dga_acq_date": "2018-01-01T00:00:00.000Z",
+					"h2": "5.900000",
+					"ch4": "8.500000",
+					"c2h4": "15.800000",
+					"c2h6": "1.000000",
+					"c2h2": "0.000000",
+					"co": "248.600006"
+				},
+				{
+					"dga_acq_date": "2017-01-01T00:00:00.000Z",
+					"h2": "5.540000",
+					"ch4": "4.400000",
+					"c2h4": "7.140000",
+					"c2h6": "2.190000",
+					"c2h2": "0.000000",
+					"co": "132.240005"
+				},
+				{
+					"dga_acq_date": "2015-01-15T00:00:00.000Z",
+					"h2": "8.000000",
+					"ch4": "2.200000",
+					"c2h4": "0.700000",
+					"c2h6": "1.300000",
+					"c2h2": "0.000000",
+					"co": "36.200001"
+				},
+				{
+					"dga_acq_date": "2015-01-01T00:00:00.000Z",
+					"h2": "8.000000",
+					"ch4": "8.600000",
+					"c2h4": "10.100000",
+					"c2h6": "4.100000",
+					"c2h2": "0.000000",
+					"co": "226.899994"
+				},
+				{
+					"dga_acq_date": "2013-01-01T00:00:00.000Z",
+					"h2": "8.000000",
+					"ch4": "5.000000",
+					"c2h4": "7.000000",
+					"c2h6": "1.000000",
+					"c2h2": "0.000000",
+					"co": "156.000000"
+				},
+				{
+					"dga_acq_date": "2012-10-01T00:00:00.000Z",
+					"h2": "11.000000",
+					"ch4": "3.000000",
+					"c2h4": "1.800000",
+					"c2h6": "0.500000",
+					"c2h2": "0.000000",
+					"co": "79.300003"
+				},
+				{
+					"dga_acq_date": "2012-09-01T00:00:00.000Z",
+					"h2": "11.000000",
+					"ch4": "3.700000",
+					"c2h4": "3.300000",
+					"c2h6": "0.500000",
+					"c2h2": "0.000000",
+					"co": "105.000000"
+				},
+				{
+					"dga_acq_date": "2012-05-01T00:00:00.000Z",
+					"h2": "9.100000",
+					"ch4": "4.900000",
+					"c2h4": "1.400000",
+					"c2h6": "1.200000",
+					"c2h2": "0.000000",
+					"co": "12.600000"
+				},
+				{
+					"dga_acq_date": "2012-04-01T00:00:00.000Z",
+					"h2": "9.100000",
+					"ch4": "4.900000",
+					"c2h4": "1.400000",
+					"c2h6": "1.200000",
+					"c2h2": "0.000000",
+					"co": "236.800003"
+				},
+				{
+					"dga_acq_date": "2012-01-15T00:00:00.000Z",
+					"h2": "6.000000",
+					"ch4": "5.000000",
+					"c2h4": "1.000000",
+					"c2h6": "1.000000",
+					"c2h2": "0.000000",
+					"co": "328.000000"
+				},
+				{
+					"dga_acq_date": "2012-01-01T00:00:00.000Z",
+					"h2": "6.000000",
+					"ch4": "5.100000",
+					"c2h4": "2.200000",
+					"c2h6": "1.200000",
+					"c2h2": "0.000000",
+					"co": "261.299988"
+				},
+				{
+					"dga_acq_date": "2011-12-01T00:00:00.000Z",
+					"h2": "2.000000",
+					"ch4": "4.000000",
+					"c2h4": "1.000000",
+					"c2h6": "1.000000",
+					"c2h2": "0.000000",
+					"co": "337.000000"
+				},
+				{
+					"dga_acq_date": "2010-01-01T00:00:00.000Z",
+					"h2": "4.700000",
+					"ch4": "2.400000",
+					"c2h4": "5.600000",
+					"c2h6": "3.200000",
+					"c2h2": "0.000000",
+					"co": "148.199997"
+				}
+			],
+			"fields": [
+				{
+					"name": "dga_acq_date",
+					"tableID": 17410,
+					"columnID": 1,
+					"dataTypeID": 1114,
+					"dataTypeSize": 8,
+					"dataTypeModifier": -1,
+					"format": "text"
+				},
+				{
+					"name": "h2",
+					"tableID": 0,
+					"columnID": 0,
+					"dataTypeID": 1700,
+					"dataTypeSize": -1,
+					"dataTypeModifier": 4194314,
+					"format": "text"
+				},
+				{
+					"name": "ch4",
+					"tableID": 0,
+					"columnID": 0,
+					"dataTypeID": 1700,
+					"dataTypeSize": -1,
+					"dataTypeModifier": 4194314,
+					"format": "text"
+				},
+				{
+					"name": "c2h4",
+					"tableID": 0,
+					"columnID": 0,
+					"dataTypeID": 1700,
+					"dataTypeSize": -1,
+					"dataTypeModifier": 4194314,
+					"format": "text"
+				},
+				{
+					"name": "c2h6",
+					"tableID": 0,
+					"columnID": 0,
+					"dataTypeID": 1700,
+					"dataTypeSize": -1,
+					"dataTypeModifier": 4194314,
+					"format": "text"
+				},
+				{
+					"name": "c2h2",
+					"tableID": 0,
+					"columnID": 0,
+					"dataTypeID": 1700,
+					"dataTypeSize": -1,
+					"dataTypeModifier": 4194314,
+					"format": "text"
+				},
+				{
+					"name": "co",
+					"tableID": 0,
+					"columnID": 0,
+					"dataTypeID": 1700,
+					"dataTypeSize": -1,
+					"dataTypeModifier": 4194314,
+					"format": "text"
+				}
+			],
+			"_parsers": [null, null, null, null, null, null, null],
+			"_types": {
+				"_types": {
+					"arrayParser": {},
+					"builtins": {
+						"BOOL": 16,
+						"BYTEA": 17,
+						"CHAR": 18,
+						"INT8": 20,
+						"INT2": 21,
+						"INT4": 23,
+						"REGPROC": 24,
+						"TEXT": 25,
+						"OID": 26,
+						"TID": 27,
+						"XID": 28,
+						"CID": 29,
+						"JSON": 114,
+						"XML": 142,
+						"PG_NODE_TREE": 194,
+						"SMGR": 210,
+						"PATH": 602,
+						"POLYGON": 604,
+						"CIDR": 650,
+						"FLOAT4": 700,
+						"FLOAT8": 701,
+						"ABSTIME": 702,
+						"RELTIME": 703,
+						"TINTERVAL": 704,
+						"CIRCLE": 718,
+						"MACADDR8": 774,
+						"MONEY": 790,
+						"MACADDR": 829,
+						"INET": 869,
+						"ACLITEM": 1033,
+						"BPCHAR": 1042,
+						"VARCHAR": 1043,
+						"DATE": 1082,
+						"TIME": 1083,
+						"TIMESTAMP": 1114,
+						"TIMESTAMPTZ": 1184,
+						"INTERVAL": 1186,
+						"TIMETZ": 1266,
+						"BIT": 1560,
+						"VARBIT": 1562,
+						"NUMERIC": 1700,
+						"REFCURSOR": 1790,
+						"REGPROCEDURE": 2202,
+						"REGOPER": 2203,
+						"REGOPERATOR": 2204,
+						"REGCLASS": 2205,
+						"REGTYPE": 2206,
+						"UUID": 2950,
+						"TXID_SNAPSHOT": 2970,
+						"PG_LSN": 3220,
+						"PG_NDISTINCT": 3361,
+						"PG_DEPENDENCIES": 3402,
+						"TSVECTOR": 3614,
+						"TSQUERY": 3615,
+						"GTSVECTOR": 3642,
+						"REGCONFIG": 3734,
+						"REGDICTIONARY": 3769,
+						"JSONB": 3802,
+						"REGNAMESPACE": 4089,
+						"REGROLE": 4096
+					}
+				},
+				"text": {},
+				"binary": {}
+			},
+			"RowCtor": null,
+			"rowAsArray": false
+		}
+	},
+	"statusCode": "OK",
+	"statusCodeValue": 200
+}
